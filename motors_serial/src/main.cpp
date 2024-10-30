@@ -36,9 +36,9 @@ void loop() {
     Serial.print(analogRead(PIN_DIRECTION_PWM_1));
     Serial.print(";PWM2: ");
     Serial.print(analogRead(PIN_DIRECTION_PWM_2));
-    Serial.print(";Motor 1 impulses/s: ");
+    Serial.print(";Motor 1 impulses: ");
     Serial.print(motor1.get_encoder_count());
-    Serial.print(";Motor 2 impulses/s: ");
+    Serial.print(";Motor 2 impulses: ");
     Serial.println(motor2.get_encoder_count());
 
     count += 10;

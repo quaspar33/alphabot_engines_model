@@ -10,7 +10,7 @@ ser = serial.Serial('/dev/cu.usbmodem11101', 9600)
 data = []
 
 try:
-    print("Rozpoczynam odczyt danych. Wciśnij Ctrl+C, aby zakończyć.")
+    print("Starting to read data. Press CTRL+C to exit.")
     while True:
         if ser.in_waiting > 0:
             line = ser.readline().decode('utf-8').strip()
@@ -25,7 +25,7 @@ try:
                 data.append([pwm1, pwm2, impulses1, impulses2])
 
 except KeyboardInterrupt:
-    print("\nZakończono odczyt.")
+    print("\nStopped.")
     ser.close()
 
 if data:
@@ -34,7 +34,7 @@ if data:
         writer = csv.writer(csv_file)
         writer.writerow(["PWM1", "PWM2", "Impulses1", "Impulses2"])
         writer.writerows(data)
-    print(f"Zapisano dane do pliku {csv_filename}")
+    print(f"Saved data in file: {csv_filename}")
 
     data_array = np.array(data)
     pwm1_values = data_array[:, 0].reshape(-1, 1)
@@ -50,28 +50,28 @@ if data:
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
 
-    ax1.scatter(pwm1_values, impulses1_values, color="blue", label="Dane (Silnik 1)")
+    ax1.scatter(pwm1_values, impulses1_values, color="blue", label="Data (Engine 1)")
     ax1.plot(pwm1_values, model1.predict(pwm1_values), color="red",
-             label=f"Regresja: Impuls = {a1:.2f} * PWM + {b1:.2f}")
+             label=f"Regression: Impuls = {a1:.2f} * PWM + {b1:.2f}")
     ax1.set_xlabel("PWM1")
-    ax1.set_ylabel("Impulsów na sekundę")
-    ax1.set_title("Silnik 1: Zależność Impulsów od PWM")
+    ax1.set_ylabel("Impulses per second")
+    ax1.set_title("Engine 2: impulses to PWM relation")
     ax1.legend()
 
-    ax2.scatter(pwm2_values, impulses2_values, color="green", label="Dane (Silnik 2)")
+    ax2.scatter(pwm2_values, impulses2_values, color="green", label="Data (Engine 2)")
     ax2.plot(pwm2_values, model2.predict(pwm2_values), color="red",
-             label=f"Regresja: Impuls = {a2:.2f} * PWM + {b2:.2f}")
+             label=f"Regresion: Impuls = {a2:.2f} * PWM + {b2:.2f}")
     ax2.set_xlabel("PWM2")
-    ax2.set_ylabel("Impulsów na sekundę")
-    ax2.set_title("Silnik 2: Zależność Impulsów od PWM")
+    ax2.set_ylabel("Impulses per second")
+    ax2.set_title("Engine 2: impulses to PWM relation")
     ax2.legend()
 
     plt.tight_layout()
     plt.show()
 
-    print("\nModel dla Motor 1:")
+    print("\nModel for Engine 1:")
     print(f"Impulses1 = {a1:.2f} * PWM1 + {b1:.2f}")
-    print("\nModel dla Motor 2:")
+    print("\nModel for Motor 2:")
     print(f"Impulses2 = {a2:.2f} * PWM2 + {b2:.2f}")
 else:
     print("No data was collected.")
