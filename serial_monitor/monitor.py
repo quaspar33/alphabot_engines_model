@@ -3,6 +3,7 @@ import time
 import numpy as np
 import csv
 from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
 
 ser = serial.Serial('/dev/cu.usbmodem11101', 9600)
 
@@ -46,6 +47,27 @@ if data:
 
     a1, b1 = model1.coef_[0], model1.intercept_
     a2, b2 = model2.coef_[0], model2.intercept_
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+
+    ax1.scatter(pwm1_values, impulses1_values, color="blue", label="Dane (Silnik 1)")
+    ax1.plot(pwm1_values, model1.predict(pwm1_values), color="red",
+             label=f"Regresja: Impuls = {a1:.2f} * PWM + {b1:.2f}")
+    ax1.set_xlabel("PWM1")
+    ax1.set_ylabel("Impulsów na sekundę")
+    ax1.set_title("Silnik 1: Zależność Impulsów od PWM")
+    ax1.legend()
+
+    ax2.scatter(pwm2_values, impulses2_values, color="green", label="Dane (Silnik 2)")
+    ax2.plot(pwm2_values, model2.predict(pwm2_values), color="red",
+             label=f"Regresja: Impuls = {a2:.2f} * PWM + {b2:.2f}")
+    ax2.set_xlabel("PWM2")
+    ax2.set_ylabel("Impulsów na sekundę")
+    ax2.set_title("Silnik 2: Zależność Impulsów od PWM")
+    ax2.legend()
+
+    plt.tight_layout()
+    plt.show()
 
     print("\nModel dla Motor 1:")
     print(f"Impulses1 = {a1:.2f} * PWM1 + {b1:.2f}")

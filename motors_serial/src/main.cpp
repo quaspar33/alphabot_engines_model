@@ -14,6 +14,8 @@
 Motor motor1(PIN_DIRECTION_FWD_1, PIN_DIRECTION_REV_1, PIN_DIRECTION_PWM_1, 2);
 Motor motor2(PIN_DIRECTION_FWD_2, PIN_DIRECTION_REV_2, PIN_DIRECTION_PWM_2, 3);
 
+int count;
+
 void setup() {
     Serial.begin(9600);
     motor1.set_encoder_count(0);
@@ -22,8 +24,9 @@ void setup() {
     motor2.initialize();
     motor1.set_direction(REVERSE);
     motor2.set_direction(FORWARD);
-    motor1.set_speed(128);
-    motor2.set_speed(128);
+    motor1.set_speed(0);
+    motor2.set_speed(0);
+    count = 0;
 }
 
 void loop() {
@@ -37,6 +40,11 @@ void loop() {
     Serial.print(motor1.get_encoder_count());
     Serial.print(";Motor 2 impulses/s: ");
     Serial.println(motor2.get_encoder_count());
+
+    count += 10;
+
+    motor1.set_speed(count);
+    motor2.set_speed(count);
 
     motor1.reset_encoder_count();
     motor2.reset_encoder_count();
